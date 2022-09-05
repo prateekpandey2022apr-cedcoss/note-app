@@ -15,10 +15,15 @@ div>img {
   max-width: 500px;
 }
 
-input {
+input,
+select {
   padding: 0.5em 0.2em;
   font-size: 1em;
   width: 100%;
+}
+
+textarea {
+  padding: 0.5em 0.2em;
 }
 
 .wrapper {
@@ -59,6 +64,20 @@ input {
   text-decoration: none;
 }
 
+.text-center {
+  text-align: center;
+}
+
+.message {
+  padding: 0.5em 0.2em;
+  background-color: #28A745;
+  border-radius: 2px;
+  text-align: center;
+  color: #fff;
+  font-weight: 800;
+  margin-bottom: 2em;
+}
+
 ul.breadcrumb {
   padding: 10px 16px;
   list-style: none;
@@ -85,6 +104,15 @@ ul.breadcrumb li a:hover {
   color: #01447e;
   text-decoration: underline;
 }
+
+/* no-notes */
+
+.no-notes {
+  max-width: 400px;
+  margin: 0 auto;
+}
+
+/* end of no-notes */
 
 /*  */
 
@@ -170,6 +198,15 @@ ul.breadcrumb li a:hover {
   border-radius: 2px;
 }
 
+.sidebar li.active {
+  background-color: #e3e3e3;
+  font-weight: 800;
+}
+
+.sidebar li.active a .caterory-count {
+  border: 1px solid #c2c2c2;
+}
+
 /* 
 ul li::before {
   content: "\2022";
@@ -193,6 +230,8 @@ ul li::before {
   margin-bottom: 2em;
   border: 1px solid #e3e3e3;
   border-radius: 10px;
+  display: flex;
+  flex-direction: column;
 }
 
 .card-header {
@@ -208,6 +247,25 @@ ul li::before {
 .card-footer {
   display: flex;
   justify-content: space-between;
+  margin-top: auto;
+}
+
+.card-footer .buttons a {
+  display: inline-block;
+  margin: 0.2em;
+  padding: 5px 15px;
+  border-radius: 4px;
+  border: 1px solid #ddd;
+  color: #fff;
+  background-color: antiquewhite;
+}
+
+.card-footer .buttons a.edit-btn {
+  color: #000;
+}
+
+.card-footer .buttons a.del-btn {
+  color: #db6262;
 }
 
 .card .card-title {
@@ -219,6 +277,10 @@ ul li::before {
   padding: 0.2em 0.5em;
   border-radius: 5px;
   background-color: antiquewhite;
+}
+
+.card .card-category a {
+  text-decoration: none;
 }
 
 /* add note form */
@@ -236,6 +298,14 @@ ul li::before {
 
   width: 500px;
   margin: 0 auto;
+  border: 2px solid #e3e3e3;
+  padding: 2em 1.5em;
+  border-radius: 7px;
+  box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
+}
+
+.add-note form h2 {
+  margin-bottom: 1em;
 }
 
 /* end for add note form */

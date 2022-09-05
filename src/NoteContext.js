@@ -1,56 +1,126 @@
-import { createContext, useState, useEffect } from "react";
-import { useNavigate, useLocation } from "react-router-dom";
+import { compose } from "@mui/system";
+import moment from "moment";
+import { createContext, useState, useEffect, useDebugValue } from "react";
+import { useNavigate, useLocation, useSearchParams } from "react-router-dom";
+import noteList from "./data";
 
 const NoteContext = createContext();
 
 export function NoteProvider({ children }) {
+  // console.log(notes);
+  const [notes, setNotes] = useState(noteList);
+  const [count, setCount] = useState(6);
+  const [currentNote, setCurrentNote] = useState({});
   const [result, setResult] = useState([]);
   const [query, setQuery] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
   const [open, setOpen] = useState(false);
-
+  const [message, setMessage] = useState("");
+  const [filteredNotes, setFilteredNotes] = useState([]);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
 
+  let [searchParams, setSearchParams] = useSearchParams();
+
+  const navigate = useNavigate();
+  const location = useLocation();
+
+  // useEffect(() => {
+  //   notes.sort((a, b) => b.id - a.id);
+  //   setNotes([...notes]);
+  //   // localStorage.setItem("posts", JSON.stringify(notes));
+  // }, [notes]);
+
+  useEffect(() => {
+    console.log(location);
+
+    if (location.pathname === "/" && location.search === "") {
+      // setProducts(inventory);
+      // setIsSearchSubmit(false);
+      if (query) {
+        setQuery("");
+        setResult([]);
+      }
+
+      setCurrentNote({});
+      setMessage("");
+    }
+  }, [location]);
+
   function handleSearch(event) {
     event.preventDefault();
-    console.log(event);
+    // console.log(event);
+    // console.log(searchParams.get("category"));
+    // console.log(searchParams.entries());
 
-    if (!query) {
+    // debugger;
+
+    // let queryStr = "";
+    // if (query) {
+    //   queryStr += `/?query=${query}`;
+    //   if (searchParams.get("category")) {
+    //     queryStr += `&category=${searchParams.get("category")}`;
+    //   }
+    // } else {
+    //   if (searchParams.get("category")) {
+    //     queryStr += `/?category=${searchParams.get("category")}`;
+    //   }
+    // }
+
+    // navigate(queryStr);
+  }
+
+  function handleEditNote(event) {
+    event.preventDefault();
+    console.log("edit");
+
+    if (!currentNote.title || !currentNote.text || !currentNote.category) {
+      alert("All fields are required");
       return;
     }
 
-    // const api = new CFetch("`https://newsapi.org/v2/");
-
-    // api.get(endpoint).then((data) => {
-    //   console.log(data);
-    // });
-
-    setIsLoading(true);
-    setError("");
-
-    fetch(
-      `https://newsapi.org/v2/everything?q=${query}&apiKey=de713b26887d4c68a61209262645aa51`
-    )
-      .then((response) => response.json())
-      .then((data) => {
-        console.log(data);
-        if (data.status === "ok") {
-          console.log(data.articles[0]);
-          setResult(data.articles);
-        } else {
-          throw new Error("Error fetching news");
+    setNotes(
+      notes.filter((item) => {
+        if (item.id === currentNote.id) {
+          item.title = currentNote.title;
+          item.text = currentNote.text;
+          item.category = currentNote.category;
         }
+        return item;
       })
-      .catch((error) => {
-        console.log(error);
-        // alert(error.toString());
-        setError(error.toString());
-      })
-      .finally(() => {
-        setIsLoading(false);
-      });
+    );
+
+    setMessage("Note Updated");
+    // setCurrentNote({});
+  }
+
+  function handleDeleteNote(event, nodeId) {
+    event.preventDefault();
+    console.log("ee");
+    setNotes([...notes.filter((item) => item.id !== nodeId)]);
+  }
+
+  function handleAddNote(event) {
+    event.preventDefault();
+    console.log("add");
+
+    if (!currentNote.title || !currentNote.text || !currentNote.category) {
+      alert("All fields are required");
+      return;
+    }
+
+    setNotes([
+      ...notes,
+      {
+        ...currentNote,
+        id: count,
+        date: new Date(),
+      },
+    ]);
+    setCurrentNote({});
+    setCount(count + 1);
+    setMessage("Note Added");
   }
 
   return (
@@ -58,17 +128,20 @@ export function NoteProvider({ children }) {
       value={{
         query,
         setQuery,
-        result,
-        setResult,
-        isLoading,
-        setIsLoading,
-        error,
-        setError,
+        notes,
+        setNotes,
+        handleAddNote,
+        currentNote,
+        setCurrentNote,
+        handleDeleteNote,
+        handleEditNote,
+        message,
+        setMessage,
+        filteredNotes,
+        setFilteredNotes,
+        searchParams,
+        setSearchParams,
         handleSearch,
-        open,
-        setOpen,
-        handleOpen,
-        handleClose,
       }}
     >
       {children}

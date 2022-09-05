@@ -1,7 +1,20 @@
-import React from "react";
-import { Link } from "react-router-dom";
+import React, { useContext } from "react";
+import { Link, useSearchParams } from "react-router-dom";
+import NoteContext from "../NoteContext";
 
 function Navbar() {
+  const {
+    notes,
+    setNotes,
+    handleAddNote,
+    handleDeleteNote,
+    searchParams,
+    setSearchParams,
+    query,
+    setQuery,
+    handleSearch,
+  } = useContext(NoteContext);
+
   return (
     <div className="navbar-container">
       <div className="wrapper">
@@ -13,8 +26,13 @@ function Navbar() {
             </Link>
           </div>
           <div className="search">
-            <form>
-              <input type="text" placeholder="Search..." />
+            <form onSubmit={handleSearch}>
+              <input
+                type="text"
+                placeholder="Search..."
+                value={query}
+                onChange={(event) => setQuery(event.target.value)}
+              />
               <span className="search-icon">
                 <i className="fa-solid fa-magnifying-glass"></i>
               </span>
